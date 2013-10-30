@@ -16,10 +16,11 @@
 
 package com.android.volley;
 
-import org.apache.http.HttpStatus;
-
 import java.util.Collections;
 import java.util.Map;
+
+import org.apache.http.Header;
+import org.apache.http.HttpStatus;
 
 /**
  * Data and headers returned from {@link Network#performRequest(Request)}.
@@ -38,6 +39,16 @@ public class NetworkResponse {
         this.data = data;
         this.headers = headers;
         this.notModified = notModified;
+        this.apacheHeaders=null;
+    }
+    
+    public NetworkResponse(int statusCode, byte[] data, Map<String, String> headers,
+            boolean notModified, Header[] apacheHeaders) {
+        this.statusCode = statusCode;
+        this.data = data;
+        this.headers = headers;
+        this.notModified = notModified;
+        this.apacheHeaders=apacheHeaders;
     }
 
     public NetworkResponse(byte[] data) {
@@ -59,4 +70,12 @@ public class NetworkResponse {
 
     /** True if the server returned a 304 (Not Modified). */
     public final boolean notModified;
+    
+    /** added by georgiecasey 
+    /*  https://github.com/georgiecasey
+    /*  fix for getting duplicate header responses like multiple Set-Cookie
+    /*  http://stackoverflow.com/questions/18998361/android-volley-duplicate-set-cookie-is-overriden
+    	*/ 
+    public final Header[] apacheHeaders;
+    
 }
